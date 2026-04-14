@@ -1,0 +1,12 @@
+{
+  "name": "api_doc_server",
+  "version": "v0.0.1",
+  "description": "",
+  "main": "app.js",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1",
+    "postman-collection": "^5.3.0"
+  }
+}
