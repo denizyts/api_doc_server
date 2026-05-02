@@ -88,14 +88,14 @@ node app.js
 
 Add your screenshots below to showcase the UI and features of the project.
 
-### Home Page
-![Home Page](./screenshots/image.png)
+### Filter Request Methods
+![Filter Request Methods](./screenshots/image.png)
 
-### Endpoint View
-![Endpoint View](./screenshots/image2.png)
+### Folder structure
+![Folder structure](./screenshots/image2.png)
 
-### Collection Overview
-![Collection Overview](./screenshots/image3.png)
+### Response view
+![Response view](./screenshots/image3.png)
 
 ---
 
