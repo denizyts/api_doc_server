@@ -12,11 +12,6 @@ module.exports = {
             type: "postman",
             name: "CYBERSOURCE REST APIs.postman_collection.json"
         },
-        {
-            pathName: "/CyberSource",
-            type: "postman",
-            name: "CYBERSOURCE REST APIs.postman_collection.json"
-        },
     ]
 }
 

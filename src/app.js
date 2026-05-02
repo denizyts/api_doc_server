@@ -9,11 +9,11 @@ const PORT = cfg?.port || 3000;
 
 app.get('/', (req, res) => {
     try {
-        const htmlString = `<html></html>`
-        res.send(htmlString);
+        const raw = fs.readFileSync(`public/index.html`, "utf-8");
+        res.send(raw);
     } catch (error) {
         console.error(`HTML generation error: ${error?.stack}`);
-        res.status(500).send('failed to generate postman');
+        res.status(500).send('Error Occured');
     }
 });
 
@@ -31,7 +31,7 @@ for (let collection of cfg?.collections) {
             res.send(html);
         } catch (error) {
             console.error(`HTML generation error: ${error?.stack}`);
-            res.status(500).send('failed to generate postman');
+            res.status(500).send('Error Occured');
         }
     });
     console.debug(`Collection ${collection?.name} is registered at ${collection?.pathName}`);

@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#0a0a0f;
+  --surface:#111118;
+  --border:#1e1e2e;
+  --border2:#2a2a3e;
+  --accent:#00ff88;
+  --accent2:#0088ff;
+  --accent3:#ff0055;
+  --text:#e8e8f0;
+  --muted:#6b6b88;
+  --subtle:#3a3a55;
+  --mono:'Space Mono',monospace;
+  --display:'Bebas Neue',sans-serif;
+  --body:'DM Sans',sans-serif;
+}
+
+html{scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--bg);color:var(--text);overflow-x:hidden;min-height:100vh}
+
+/* ── Noise overlay ── */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;opacity:.6
+}
+
+/* ── Grid bg ── */
+.grid-bg{
+  position:fixed;inset:0;
+  background-image:linear-gradient(rgba(0,255,136,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,136,.04) 1px,transparent 1px);
+  background-size:40px 40px;
+  mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,black 0%,transparent 70%);
+  pointer-events:none;z-index:0
+}
+
+/* ── Glow blobs ── */
+.blob{position:fixed;border-radius:50%;filter:blur(100px);pointer-events:none;z-index:0;animation:drift 8s ease-in-out infinite alternate}
+.blob-1{width:400px;height:400px;background:rgba(0,255,136,.08);top:-100px;left:-100px}
+.blob-2{width:350px;height:350px;background:rgba(0,136,255,.06);top:200px;right:-50px;animation-delay:-4s}
+.blob-3{width:250px;height:250px;background:rgba(255,0,85,.05);bottom:100px;left:30%;animation-delay:-2s}
+
+@keyframes drift{0%{transform:translate(0,0) scale(1)}100%{transform:translate(20px,15px) scale(1.05)}}
+
+/* ── Layout ── */
+.container{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:0 32px}
+
+/* ── Header ── */
+header{padding:28px 0 0}
+nav{display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:var(--mono);font-size:13px;color:var(--accent);letter-spacing:.08em;display:flex;align-items:center;gap:8px}
+.logo-dot{width:8px;height:8px;background:var(--accent);border-radius:50%;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+
+.nav-links{display:flex;gap:6px;align-items:center}
+.nav-link{font-family:var(--mono);font-size:11px;color:var(--muted);text-decoration:none;padding:6px 12px;border:1px solid transparent;border-radius:4px;letter-spacing:.05em;transition:all .2s;display:flex;align-items:center;gap:6px}
+.nav-link:hover{color:var(--accent);border-color:var(--border2);background:rgba(0,255,136,.05)}
+.nav-link.primary{border-color:var(--accent);color:var(--accent);background:rgba(0,255,136,.08)}
+.nav-link.primary:hover{background:rgba(0,255,136,.15)}
+
+/* ── Terminal badge ── */
+.terminal-badge{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border2);background:var(--surface);padding:6px 14px;border-radius:4px;font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:24px;animation:fadeDown .6s ease .1s both}
+.tb-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 1.5s ease-in-out infinite}
+.tb-text{color:var(--accent);margin-left:2px}
+
+/* ── Hero ── */
+.hero{padding:80px 0 72px;text-align:center}
+.hero-tag{display:flex;justify-content:center;animation:fadeDown .5s ease both}
+.hero-title{font-family:var(--display);font-size:clamp(60px,10vw,120px);line-height:.92;letter-spacing:.02em;margin-bottom:20px;animation:fadeUp .6s ease .15s both}
+.title-line-1{display:block;color:var(--text)}
+.title-line-2{display:block;color:transparent;-webkit-text-stroke:1px var(--accent);filter:drop-shadow(0 0 20px rgba(0,255,136,.3))}
+.title-line-3{display:block;color:var(--accent);position:relative}
+
+.hero-sub{font-size:16px;color:var(--muted);max-width:520px;margin:0 auto 36px;line-height:1.7;animation:fadeUp .6s ease .25s both}
+.hero-sub strong{color:var(--text)}
+
+.hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;animation:fadeUp .6s ease .35s both}
+.btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;letter-spacing:.06em;padding:12px 24px;border-radius:4px;border:1px solid;text-decoration:none;transition:all .2s;cursor:pointer;position:relative;overflow:hidden}
+.btn::after{content:'';position:absolute;inset:0;background:white;opacity:0;transition:opacity .2s}
+.btn:hover::after{opacity:.04}
+.btn-primary{background:var(--accent);color:#000;border-color:var(--accent);font-weight:700;box-shadow:0 0 30px rgba(0,255,136,.25)}
+.btn-primary:hover{box-shadow:0 0 50px rgba(0,255,136,.4);transform:translateY(-1px)}
+.btn-secondary{background:transparent;color:var(--text);border-color:var(--border2)}
+.btn-secondary:hover{border-color:var(--subtle);transform:translateY(-1px)}
+
+/* ── Code snippet ── */
+.snippet-wrap{margin:60px 0;animation:fadeUp .6s ease .45s both}
+.snippet-header{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--border2);border-bottom:none;border-radius:6px 6px 0 0;padding:10px 16px}
+.snippet-dots{display:flex;gap:6px}
+.sdot{width:10px;height:10px;border-radius:50%}
+.sdot-r{background:#ff5f56}
+.sdot-y{background:#ffbd2e}
+.sdot-g{background:#27c93f}
+.snippet-title{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.08em}
+.snippet-copy{font-family:var(--mono);font-size:10px;color:var(--muted);background:none;border:1px solid var(--border2);border-radius:3px;padding:2px 8px;cursor:pointer;transition:all .2s}
+.snippet-copy:hover{color:var(--accent);border-color:var(--accent)}
+.snippet-copy.ok{color:var(--accent)}
+pre.code{background:var(--surface);border:1px solid var(--border2);border-radius:0 0 6px 6px;padding:20px 20px;font-family:var(--mono);font-size:12px;line-height:1.8;overflow-x:auto;margin:0}
+.c-key{color:#0088ff}
+.c-str{color:#00ff88}
+.c-num{color:#ffbd2e}
+.c-pun{color:#6b6b88}
+.c-kw{color:#ff0055}
+
+/* ── Features ── */
+.section{padding:60px 0}
+.section-label{font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--accent);text-transform:uppercase;margin-bottom:12px}
+.section-title{font-family:var(--display);font-size:clamp(36px,5vw,52px);letter-spacing:.04em;margin-bottom:40px;line-height:1}
+
+.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.feature{background:var(--bg);padding:28px 24px;transition:background .2s;position:relative;overflow:hidden}
+.feature::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent);transform:scaleX(0);transform-origin:left;transition:transform .3s}
+.feature:hover::before{transform:scaleX(1)}
+.feature:hover{background:var(--surface)}
+.feature-icon{font-size:22px;margin-bottom:14px;display:block}
+.feature-title{font-family:var(--mono);font-size:13px;color:var(--text);margin-bottom:8px;letter-spacing:.04em}
+.feature-desc{font-size:13px;color:var(--muted);line-height:1.65}
+
+/* ── Stats ── */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border2);border:1px solid var(--border2);border-radius:8px;overflow:hidden;margin:60px 0}
+.stat{background:var(--bg);padding:32px 24px;text-align:center}
+.stat-num{font-family:var(--display);font-size:52px;color:var(--accent);line-height:1;display:block;letter-spacing:.02em}
+.stat-label{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:6px;display:block}
+
+/* ── How it works ── */
+.steps{display:flex;flex-direction:column;gap:0}
+.step{display:grid;grid-template-columns:48px 1fr;gap:20px;padding:24px 0;border-bottom:1px solid var(--border);align-items:start}
+.step:last-child{border-bottom:none}
+.step-num{font-family:var(--display);font-size:36px;color:var(--subtle);line-height:1;padding-top:2px}
+.step-content{}
+.step-title{font-family:var(--mono);font-size:13px;color:var(--text);margin-bottom:6px;letter-spacing:.04em}
+.step-desc{font-size:13px;color:var(--muted);line-height:1.65}
+.step-code{font-family:var(--mono);font-size:11px;color:var(--accent);background:rgba(0,255,136,.07);border:1px solid rgba(0,255,136,.15);border-radius:4px;padding:8px 12px;margin-top:10px;display:inline-block}
+
+/* ── CTA ── */
+.cta{padding:80px 0;text-align:center;border-top:1px solid var(--border)}
+.cta-title{font-family:var(--display);font-size:clamp(40px,7vw,72px);letter-spacing:.04em;margin-bottom:16px}
+.cta-sub{color:var(--muted);font-size:15px;margin-bottom:36px}
+
+/* ── Footer ── */
+footer{border-top:1px solid var(--border);padding:24px 0;display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.footer-left{display:flex;align-items:center;gap:8px}
+.footer-link{color:var(--muted);text-decoration:none;transition:color .2s}
+.footer-link:hover{color:var(--accent)}
+
+/* ── Animations ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+
+<div class="container">
+  <header>
+    <nav>
+      <div class="logo">
+        <span class="logo-dot"></span>
+        <span>api_doc_server</span>
+      </div>
+      <div class="nav-links">
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#how" class="nav-link">How it works</a>
+        <a href="https://github.com/denizyts/api_doc_server" target="_blank" class="nav-link primary">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          GitHub
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-tag">
+      <div class="terminal-badge">
+        <span class="tb-dot"></span>
+        <span>v0.0.1</span>
+        <span class="tb-text">— Dynamic API Documentation Server</span>
+      </div>
+    </div>
+    <h1 class="hero-title">
+      <span class="title-line-1">SERVE YOUR</span>
+      <span class="title-line-2">API DOCS</span>
+      <span class="title-line-3">LIVE.</span>
+    </h1>
+    <p class="hero-sub">
+      Drop a <strong>Postman collection</strong>, get a blazing-fast <strong>HTML documentation site</strong> — served dynamically with Node.js. No static exports. No stale docs.
+    </p>
+    <div class="hero-actions">
+      <a href="https://github.com/denizyts/api_doc_server" target="_blank" class="btn btn-primary">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        Clone & Deploy
+      </a>
+      <a href="#how" class="btn btn-secondary">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        How it works
+      </a>
+    </div>
+  </section>
+
+  <!-- Code snippet -->
+  <div class="snippet-wrap">
+    <div class="snippet-header">
+      <div class="snippet-dots">
+        <div class="sdot sdot-r"></div>
+        <div class="sdot sdot-y"></div>
+        <div class="sdot sdot-g"></div>
+      </div>
+      <span class="snippet-title">config.js</span>
+      <button class="snippet-copy" id="cpyBtn" onclick="copySnippet()">copy</button>
+    </div>
+    <pre class="code" id="codeSnippet"><span class="c-kw">module</span><span class="c-pun">.</span><span class="c-key">exports</span> <span class="c-pun">= {</span>
+  <span class="c-key">port</span><span class="c-pun">:</span> <span class="c-num">3000</span><span class="c-pun">,</span>
+  <span class="c-key">collections</span><span class="c-pun">: [</span>
+    <span class="c-pun">{</span>
+      <span class="c-key">name</span><span class="c-pun">:</span> <span class="c-str">"my_api.json"</span><span class="c-pun">,</span>   <span class="c-pun c-muted">// Postman export filename</span>
+      <span class="c-key">pathName</span><span class="c-pun">:</span> <span class="c-str">"/api/docs"</span><span class="c-pun">,</span>  <span class="c-pun c-muted">// URL path to serve at</span>
+      <span class="c-key">type</span><span class="c-pun">:</span> <span class="c-str">"postman"</span>          <span class="c-pun c-muted">// generator type</span>
+    <span class="c-pun">}</span>
+  <span class="c-pun">]</span>
+<span class="c-pun">}</span></pre>
+  </div>
+
+  <!-- Features -->
+  <section class="section" id="features">
+    <div class="section-label">// Features</div>
+    <div class="section-title">BUILT DIFFERENT.</div>
+    <div class="features">
+      <div class="feature">
+        <span class="feature-icon">⚡</span>
+        <div class="feature-title">DYNAMIC GENERATION</div>
+        <p class="feature-desc">HTML is rendered on every request — no rebuild step, no stale exports. Edit your collection, refresh, done.</p>
+      </div>
+      <div class="feature">
+        <span class="feature-icon">📦</span>
+        <div class="feature-title">MULTI-COLLECTION</div>
+        <p class="feature-desc">Serve multiple Postman collections at different URL paths from a single server instance.</p>
+      </div>
+      <div class="feature">
+        <span class="feature-icon">🎨</span>
+        <div class="feature-title">DARK / LIGHT MODE</div>
+        <p class="feature-desc">Polished UI with full dark and light theme support, syntax highlighting, and collapsible navigation.</p>
+      </div>
+      <div class="feature">
+        <span class="feature-icon">🔍</span>
+        <div class="feature-title">LIVE SEARCH</div>
+        <p class="feature-desc">Instant endpoint filtering by name, URL, or HTTP method — no page reload needed.</p>
+      </div>
+      <div class="feature">
+        <span class="feature-icon">🗂️</span>
+        <div class="feature-title">FOLDER STRUCTURE</div>
+        <p class="feature-desc">Preserves your Postman folder hierarchy with collapsible sidebar navigation and item counts.</p>
+      </div>
+      <div class="feature">
+        <span class="feature-icon">🚀</span>
+        <div class="feature-title">ZERO CONFIG DEPLOY</div>
+        <p class="feature-desc">Clone, drop your JSON exports, configure paths — and it's live. Pure Node.js, no build toolchain.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat">
+      <span class="stat-num">0</span>
+      <span class="stat-label">Config Files Needed</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">∞</span>
+      <span class="stat-label">Collections Supported</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">1</span>
+      <span class="stat-label">Command to Start</span>
+    </div>
+  </div>
+
+  <!-- How it works -->
+  <section class="section" id="how">
+    <div class="section-label">// How it works</div>
+    <div class="section-title">DEAD SIMPLE.</div>
+    <div class="steps">
+      <div class="step">
+        <span class="step-num">01</span>
+        <div class="step-content">
+          <div class="step-title">CLONE THE REPO</div>
+          <p class="step-desc">Get the server running locally in seconds. No framework magic, just Express.js.</p>
+          <span class="step-code">git clone https://github.com/denizyts/api_doc_server</span>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-num">02</span>
+        <div class="step-content">
+          <div class="step-title">DROP YOUR POSTMAN EXPORT</div>
+          <p class="step-desc">Export your Postman collection as JSON (v2.1) and place it in <code style="font-family:var(--mono);font-size:11px;color:var(--accent)">collection_exports/</code>.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-num">03</span>
+        <div class="step-content">
+          <div class="step-title">CONFIGURE YOUR ROUTES</div>
+          <p class="step-desc">Map collection filenames to URL paths in <code style="font-family:var(--mono);font-size:11px;color:var(--accent)">config.js</code>. Multiple collections, multiple paths — all handled.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-num">04</span>
+        <div class="step-content">
+          <div class="step-title">START & SHIP</div>
+          <p class="step-desc">Run the server. Your beautiful API documentation is live and always up to date.</p>
+          <span class="step-code">node app.js</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="cta-title">READY TO SHIP?</div>
+    <p class="cta-sub">Your API deserves documentation that doesn't suck.</p>
+    <a href="https://github.com/denizyts/api_doc_server" target="_blank" class="btn btn-primary" style="font-size:13px;padding:14px 32px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+      View on GitHub
+    </a>
+  </section>
+
+  <footer>
+    <div class="footer-left">
+      <span class="logo-dot" style="width:6px;height:6px"></span>
+      <span>api_doc_server by <a href="https://github.com/denizyts" target="_blank" class="footer-link">denizyts</a></span>
+    </div>
+    <div style="display:flex;gap:20px">
+      <a href="https://github.com/denizyts/api_doc_server" target="_blank" class="footer-link">GitHub</a>
+      <a href="https://github.com/denizyts/api_doc_server/issues" target="_blank" class="footer-link">Issues</a>
+      <a href="https://github.com/denizyts/api_doc_server/blob/main/README.md" target="_blank" class="footer-link">Docs</a>
+    </div>
+  </footer>
+</div>
+
+<script>
+function copySnippet() {
+  const txt = `module.exports = {\n  port: 3000,\n  collections: [\n    {\n      name: "my_api.json",\n      pathName: "/api/docs",\n      type: "postman"\n    }\n  ]\n}`;
+  navigator.clipboard?.writeText(txt).then(() => {
+    const btn = document.getElementById('cpyBtn');
+    btn.textContent = 'copied!';
+    btn.classList.add('ok');
+    setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('ok'); }, 2000);
+  });
+}
+
+// Animate stats numbers
+const nums = {0: 0, 1: 1};
+document.querySelectorAll('.stat-num').forEach(el => {
+  if(el.textContent === '0' || el.textContent === '1') {
+    el.style.opacity = '0';
+    const observer = new IntersectionObserver(entries => {
+      if(entries[0].isIntersecting) {
+        el.style.transition = 'opacity .4s';
+        el.style.opacity = '1';
+        observer.disconnect();
+      }
+    });
+    observer.observe(el);
+  }
+});
+</script>
+</body>
+</html>
