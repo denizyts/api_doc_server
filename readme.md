@@ -89,16 +89,13 @@ node app.js
 Add your screenshots below to showcase the UI and features of the project.
 
 ### Home Page
-
-./screenshots/image.png
+![Home Page](./screenshots/image.png)
 
 ### Endpoint View
-
-./screenshots/imag2.png
+![Endpoint View](./screenshots/imag2.png)
 
 ### Collection Overview
-
-./screenshots/imag3.png
+![Collection Overview](./screenshots/imag3.png)
 
 ---
 
