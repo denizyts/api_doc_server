@@ -92,10 +92,10 @@ Add your screenshots below to showcase the UI and features of the project.
 ![Home Page](./screenshots/image.png)
 
 ### Endpoint View
-![Endpoint View](./screenshots/imag2.png)
+![Endpoint View](./screenshots/image2.png)
 
 ### Collection Overview
-![Collection Overview](./screenshots/imag3.png)
+![Collection Overview](./screenshots/image3.png)
 
 ---
 
