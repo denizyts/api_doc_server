@@ -1,8 +1,15 @@
 {
   "name": "api_doc_server",
-  "version": "v0.0.1",
+  "version": "0.0.1",
   "description": "",
-  "main": "app.js",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "vercel-build": ""
+  },
+  "engines": {
+    "node": ">=18"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
